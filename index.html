@@ -78,7 +78,7 @@
         .x-hidden-clip {
             color: red !important;
             margin-top: -20px !important;
-            white-space: nowrap; !important;
+            white-space: nowrap !important;
         }
         .center {
             display: flex;
@@ -157,7 +157,10 @@ Ext.onReady(function() {
                         Ext.Ajax.request({
                             url: 'http://localhost:5189/api/Auth/Login',
                             method: 'POST',
-                            params: values,
+                            jsonData: values,
+                            headers: {
+                        'Content-Type': 'application/json' // set the content type
+                    },
                             success: function(response) {
                                 console.log('Success: ' + response.responseText);
                             },
@@ -199,7 +202,6 @@ Ext.onReady(function() {
                 xtype: 'textfield',
                 name: 'Name',
                 fieldLabel: 'Name',
-                vtype: 'email'
             },
             {
                 xtype: 'textfield',
@@ -210,7 +212,7 @@ Ext.onReady(function() {
                 xtype: 'textfield',
                 name: 'Email',
                 fieldLabel: 'Email',
-                // vtype: 'email'
+                vtype: 'email'
             },
             {
                 xtype: 'textfield',
@@ -250,6 +252,21 @@ Ext.onReady(function() {
                     var form = this.up('form');
                     if (form.isValid()) {
                         var values = form.getValues(); // get the field values of the form
+                        Ext.Ajax.request({
+                            url: 'http://localhost:5189/api/Auth/Register',
+                            method: 'POST',
+                             
+                            jsonData: values,
+                            headers: {
+                        'Content-Type': 'application/json' // set the content type
+                    },
+                            success: function(response) {
+                                console.log('Success: ' + response.responseText);
+                            },
+                            failure: function(response) {
+                                console.log('Failure: ' + response.status);
+                            }
+                        });
                         console.log(values); // log the field values
                     } else {
                         Ext.Msg.alert('Invalid Data', 'Please correct form errors.')
